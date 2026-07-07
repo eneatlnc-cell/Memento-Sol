@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="ask_myagent_query_patterns">
+        <item>ask Memento $prompt</item>
+        <item>告诉 Memento $prompt</item>
+        <item>打开 Memento $prompt</item>
+    </string-array>
+</resources>
