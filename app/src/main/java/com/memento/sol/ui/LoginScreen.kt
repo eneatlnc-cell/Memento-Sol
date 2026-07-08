@@ -31,7 +31,8 @@ import kotlinx.coroutines.launch
 /**
  * M3 全屏登录界面。
  *
- * 拦截未登录用户，提供手机号登录 / 注册入口。
+ * 拦截未登录用户，提供手机号登录。
+ * 注册统一在 Memento-X Web 端完成，App 不提供注册入口。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -219,30 +220,13 @@ fun LoginScreen() {
         Text(if (isLoading) "登录中..." else "登录", style = MaterialTheme.typography.titleMedium)
       }
 
-      Spacer(Modifier.height(16.dp))
+      Spacer(Modifier.height(24.dp))
 
-      // ── 注册入口 ──
-      Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth(),
-      ) {
-        Text(
-          "还没有账户？",
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        TextButton(onClick = { /* TODO: 注册流程 */ }) {
-          Text("立即注册", fontWeight = FontWeight.SemiBold)
-        }
-      }
-
-      Spacer(Modifier.height(32.dp))
-
-      // ── 底部版本 ──
+      // ── 注册引导 ──
       Text(
-        "Memento-Sol v4.0.0",
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+        "没有账户？请在 Memento-X Web 端注册",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
         textAlign = TextAlign.Center,
         modifier = Modifier.fillMaxWidth(),
       )
