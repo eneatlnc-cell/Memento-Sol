@@ -7,55 +7,120 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.memento.sol.account.AccountManager
+import com.memento.sol.NodeApp
 
+/**
+ * M3 账号页面。
+ *
+ * 已登录：展示用户信息 + 退出登录
+ * 未登录：展示引导 + 登录按钮（理论上会被 MainScreen 拦截，但保留兜底）
+ */
 @Composable
-fun AccountScreen(accountManager: AccountManager) {
-  val isLoggedIn = remember { mutableStateOf(accountManager.isLoggedIn()) }
-  var showLoginDialog by remember { mutableStateOf(false) }
-  var phone by remember { mutableStateOf("") }
-  var code by remember { mutableStateOf("") }
+fun AccountScreen() {
+  val app = NodeApp.instance
 
-  Column(modifier = Modifier.fillMaxSize().padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+  Column(
+    modifier = Modifier.fillMaxSize().padding(32.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+  ) {
     Text("账号", style = MaterialTheme.typography.headlineMedium)
-    Spacer(Modifier.height(32.dp))
 
-    if (isLoggedIn.value) {
-      Icon(Icons.Outlined.AccountCircle, null, modifier = Modifier.size(80.dp), tint = MaterialTheme.colorScheme.primary)
-      Spacer(Modifier.height(16.dp))
-      Text("已登录", style = MaterialTheme.typography.titleMedium)
-      Spacer(Modifier.height(32.dp))
-      OutlinedButton(onClick = { accountManager.logout(); isLoggedIn.value = false }, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text("退出登录") }
-    } else {
-      Icon(Icons.Outlined.AccountCircle, null, modifier = Modifier.size(80.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-      Spacer(Modifier.height(16.dp))
-      Text("未登录", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Spacer(Modifier.height(40.dp))
+
+    if (app.isLoggedIn.value) {
+      // ── 已登录 ──
+      Surface(
+        modifier = Modifier.size(88.dp),
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.primaryContainer,
+      ) {
+        Box(contentAlignment = Alignment.Center) {
+          Icon(
+            Icons.Outlined.AccountCircle,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.primary,
+          )
+        }
+      }
+
+      Spacer(Modifier.height(20.dp))
+
+      Text(
+        "已登录",
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold,
+      )
+
       Spacer(Modifier.height(8.dp))
-      Text("登录 Memento-X 账户以同步素材", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-      Spacer(Modifier.height(32.dp))
-      Button(onClick = { showLoginDialog = true }, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text("登录") }
+
+      val token = app.accountManager.getToken()
+      Text(
+        token?.let { "UID: ${it.userId}" } ?: "",
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+
+      Spacer(Modifier.height(40.dp))
+
+      OutlinedButton(
+        onClick = {
+          app.accountManager.logout()
+          app.isLoggedIn.value = false
+        },
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+        shape = MaterialTheme.shapes.medium,
+      ) {
+        Icon(Icons.Outlined.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(8.dp))
+        Text("退出登录")
+      }
+    } else {
+      // ── 未登录（兜底态） ──
+      Icon(
+        Icons.Outlined.AccountCircle,
+        contentDescription = null,
+        modifier = Modifier.size(88.dp),
+        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+      )
+
       Spacer(Modifier.height(16.dp))
-      TextButton(onClick = { showLoginDialog = true }) { Text("快速登录（开发模式）") }
+
+      Text(
+        "未登录",
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+
+      Spacer(Modifier.height(8.dp))
+
+      Text(
+        "登录 Memento-X 账户以同步素材",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+      )
+
+      Spacer(Modifier.height(32.dp))
+
+      Button(
+        onClick = { /* MainScreen 已拦截，此处为兜底 */ },
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+        shape = MaterialTheme.shapes.medium,
+      ) {
+        Text("登录")
+      }
     }
 
     Spacer(Modifier.weight(1f))
-    Text("Memento-Sol v4.0.0", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-  }
 
-  if (showLoginDialog) {
-    AlertDialog(
-      onDismissRequest = { showLoginDialog = false },
-      title = { Text("登录") },
-      text = {
-        Column {
-          OutlinedTextField(phone, { phone = it }, label = { Text("手机号") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-          Spacer(Modifier.height(8.dp))
-          OutlinedTextField(code, { code = it }, label = { Text("验证码") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-        }
-      },
-      confirmButton = { Button(onClick = { isLoggedIn.value = true; showLoginDialog = false }) { Text("登录") } },
-      dismissButton = { TextButton(onClick = { showLoginDialog = false }) { Text("取消") } },
+    Text(
+      "Memento-Sol v4.0.0",
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
     )
   }
 }

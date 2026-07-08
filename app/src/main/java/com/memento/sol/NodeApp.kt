@@ -2,6 +2,8 @@ package com.memento.sol
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.memento.sol.account.AccountManager
 import com.memento.sol.account.TokenManager
 import com.memento.sol.api.MementoApi
@@ -24,6 +26,9 @@ class NodeApp : Application() {
   lateinit var cameraCapture: CameraCapture private set
   lateinit var uploadManager: UploadManager private set
 
+  /** 响应式登录状态，供 UI 层观察 */
+  val isLoggedIn: MutableState<Boolean> = mutableStateOf(false)
+
   override fun onCreate() {
     super.onCreate()
     instance = this
@@ -34,8 +39,8 @@ class NodeApp : Application() {
     val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
     val client = OkHttpClient.Builder()
       .addInterceptor(logging)
-      .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-      .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+      .connectTimeout(30, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
       .build()
 
     val retrofit = Retrofit.Builder()
@@ -50,7 +55,10 @@ class NodeApp : Application() {
     cameraCapture = CameraCapture(this)
     uploadManager = UploadManager(api)
 
-    Log.i(TAG, "Memento-Sol v4.0.0 启动完成")
+    // 启动时恢复登录状态
+    isLoggedIn.value = accountManager.isLoggedIn()
+
+    Log.i(TAG, "Memento-Sol v4.0.0 启动完成 isLoggedIn=${isLoggedIn.value}")
   }
 
   companion object {

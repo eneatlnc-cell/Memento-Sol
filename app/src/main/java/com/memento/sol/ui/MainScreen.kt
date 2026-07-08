@@ -10,14 +10,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.memento.sol.NodeApp
-import com.memento.sol.asset.AssetEntity
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(initialTaskId: String? = null) {
-  var selectedTab by remember { mutableStateOf(if (initialTaskId != null) "asset" else "capture") }
   val app = NodeApp.instance
+
+  // 登录拦截：未登录 → 全屏 LoginScreen
+  if (!app.isLoggedIn.value) {
+    LoginScreen()
+    return
+  }
+
+  var selectedTab by remember { mutableStateOf(if (initialTaskId != null) "asset" else "capture") }
   val scope = rememberCoroutineScope()
 
   val navItems = listOf(
@@ -48,7 +54,7 @@ fun MainScreen(initialTaskId: String? = null) {
           onUploadSuccess = { scope.launch { app.assetSync.sync() } },
         )
         "asset" -> AssetListScreen(initialTaskId = initialTaskId, assetSync = app.assetSync)
-        "account" -> AccountScreen(accountManager = app.accountManager)
+        "account" -> AccountScreen()
       }
     }
   }

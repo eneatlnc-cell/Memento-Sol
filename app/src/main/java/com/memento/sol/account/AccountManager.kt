@@ -36,7 +36,7 @@ class AccountManager(private val context: Context) {
     try {
       val api = this@AccountManager.api ?: return@withContext Result.failure(Exception("API 未初始化"))
       val currentToken = getToken() ?: return@withContext Result.failure(Exception("无 Token"))
-      val response = api.refreshToken(currentToken.refreshToken)
+      val response = api.refreshToken(mapOf("refresh_token" to currentToken.refreshToken))
       if (response.isSuccessful) {
         val token = response.body() ?: return@withContext Result.failure(Exception("Token 为空"))
         saveToken(token)
