@@ -5,13 +5,6 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <!-- Memento website API domain -->
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">myagent.cn</domain>
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </domain-config>
     <!--
       localhost / 10.0.2.2 cleartext：仅模拟器本地开发用。
       release 包不会访问这些地址，规则存在亦无害；放在 domain-config 而非

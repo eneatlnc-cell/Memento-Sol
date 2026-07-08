@@ -1,113 +1,54 @@
-# Memento Android UI Style Guide
+# Memento-Sol Android UI Style Guide
 
-Scope: all native Android UI in `apps/android` (Jetpack Compose).
-Goal: one coherent visual system across onboarding, settings, and future screens.
+Scope: all native Android UI in Memento-Sol (Jetpack Compose).
+Goal: one coherent visual system across all screens.
 
 ## 1. Design Direction
 
-- Clean, quiet surfaces.
+- Clean, dark surfaces matching Memento-X palette.
 - Strong readability first.
 - One clear primary action per screen state.
 - Progressive disclosure for advanced controls.
-- Deterministic flows: validate early, fail clearly.
 
-## 2. Style Baseline
+## 2. Core Tokens
 
-The onboarding flow defines the current visual baseline.
-New screens should match that language unless there is a strong product reason not to.
-
-Baseline traits:
-
-- Light neutral background with subtle depth.
-- Clear blue accent for active/primary states.
-- Strong border hierarchy for structure.
-- Medium/semibold typography (no thin text).
-- Divider-and-spacing layout over heavy card nesting.
-
-## 3. Core Tokens
-
-Use these as shared design tokens for new Compose UI.
-
-- Background gradient: `#FFFFFF`, `#F7F8FA`, `#EFF1F5`
-- Surface: `#F6F7FA`
-- Border: `#E5E7EC`
-- Border strong: `#D6DAE2`
-- Text primary: `#17181C`
-- Text secondary: `#4D5563`
-- Text tertiary: `#8A92A2`
-- Accent primary: `#1D5DD8`
-- Accent soft: `#ECF3FF`
-- Success: `#2F8C5A`
-- Warning: `#C8841A`
+- Background: `#0A0A0F`
+- Surface: `#12121F`
+- Border: `#1E1E3A`
+- Text primary: `#FFFFFF`
+- Text secondary: `#888888`
+- Text tertiary: `#555555`
+- Accent primary: `#6C5CE7`
+- Accent soft: `#1A1A3E`
+- Success: `#00C48C`
+- Warning: `#FFB347`
 
 Rule: do not introduce random per-screen colors when an existing token fits.
 
-## 4. Typography
+## 3. Typography
 
-Primary type family: Manrope (`400/500/600/700`).
+Primary type family: system default sans-serif.
 
 Recommended scale:
 
 - Display: `34sp / 40sp`, bold
 - Section title: `24sp / 30sp`, semibold
-- Headline/action: `16sp / 22sp`, semibold
 - Body: `15sp / 22sp`, medium
-- Callout/helper: `14sp / 20sp`, medium
-- Caption 1: `12sp / 16sp`, medium
-- Caption 2: `11sp / 14sp`, medium
+- Caption: `12sp / 16sp`, medium
 
-Use monospace only for commands, setup codes, endpoint-like values.
-Hard rule: avoid ultra-thin weights on light backgrounds.
-
-## 5. Layout And Spacing
-
-- Respect safe drawing insets.
-- Keep content hierarchy mostly via spacing + dividers.
-- Prefer vertical rhythm from `8/10/12/14/20dp`.
-- Use pinned bottom actions for multi-step or high-importance flows.
-- Avoid unnecessary container nesting.
-
-## 6. Buttons And Actions
-
-- Primary action: filled accent button, visually dominant.
-- Secondary action: lower emphasis (outlined/text/surface button).
-- Icon-only buttons must remain legible and >=44dp target.
-- Back buttons in action rows use rounded-square shape, not circular by default.
-
-## 7. Inputs And Forms
-
-- Always show explicit label or clear context title.
-- Keep helper copy short and actionable.
-- Validate before advancing steps.
-- Prefer immediate inline errors over hidden failure states.
-- Keep optional advanced fields explicit (`Manual`, `Advanced`, etc.).
-
-## 8. Progress And Multi-Step Flows
-
-- Use clear step count (`Step X of N`).
-- Use labeled progress rail/indicator when steps are discrete.
-- Keep navigation predictable: back/next behavior should never surprise.
-
-## 9. Accessibility
-
-- Minimum practical touch target: `44dp`.
-- Do not rely on color alone for status.
-- Preserve high contrast for all text tiers.
-- Add meaningful `contentDescription` for icon-only controls.
-
-## 10. Architecture Rules
+## 4. Architecture Rules
 
 - Durable UI state in `MainViewModel`.
 - Composables: state in, callbacks out.
 - No business/network logic in composables.
 - Keep side effects explicit (`LaunchedEffect`, activity result APIs).
 
-## 11. Source Of Truth
+## 5. Source Of Truth
 
-- `app/src/main/java/com/myagent/app/ui/MementoTheme.kt`
-- `app/src/main/java/com/myagent/app/ui/OnboardingFlow.kt`
-- `app/src/main/java/com/myagent/app/ui/RootScreen.kt`
-- `app/src/main/java/com/myagent/app/ui/SettingsSheet.kt`
-- `app/src/main/java/com/myagent/app/MainViewModel.kt`
+- `app/src/main/java/com/memento/sol/ui/MainScreen.kt`
+- `app/src/main/java/com/memento/sol/ui/AccountScreen.kt`
+- `app/src/main/java/com/memento/sol/ui/CaptureScreen.kt`
+- `app/src/main/java/com/memento/sol/ui/AssetListScreen.kt`
+- `app/src/main/java/com/memento/sol/NodeApp.kt`
 
 If style and implementation diverge, update both in the same change.
