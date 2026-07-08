@@ -37,5 +37,10 @@ class AssetSync(private val context: Context, private val api: MementoApi) {
   suspend fun getLocalAssets(): List<AssetEntity> = withContext(Dispatchers.IO) { db.assetDao().getAll() }
   suspend fun getLocalResults(): List<AssetEntity> = withContext(Dispatchers.IO) { db.assetDao().getResults() }
 
+  suspend fun insertResult(entity: AssetEntity) = withContext(Dispatchers.IO) {
+    db.assetDao().insert(entity)
+    Log.i(TAG, "成片已入库: ${entity.assetId}")
+  }
+
   companion object { private const val TAG = "AssetSync" }
 }

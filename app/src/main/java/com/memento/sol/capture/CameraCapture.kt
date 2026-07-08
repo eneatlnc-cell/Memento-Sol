@@ -39,7 +39,7 @@ class CameraCapture(private val context: Context) {
 
   private fun createMediaFile(extension: String): File {
     val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-    val dir = File(context.cacheDir, "capture")
+    val dir = File(context.filesDir, "captures")
     if (!dir.exists()) dir.mkdirs()
     return File(dir, "memento_${timestamp}.${extension}")
   }
