@@ -4,18 +4,19 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.kotlin.ksp)
 }
 
 android {
-  namespace = "com.myagent.app"
-  compileSdk = 37
+  namespace = "com.memento.sol"
+  compileSdk = 34
 
   defaultConfig {
-    applicationId = "com.myagent.app"
-    minSdk = 31
-    targetSdk = 36
-    versionCode = 2026070101
-    versionName = "3.2.0"
+    applicationId = "com.memento.sol"
+    minSdk = 26
+    targetSdk = 34
+    versionCode = 1
+    versionName = "4.0.0"
   }
 
   buildTypes {
@@ -56,10 +57,6 @@ android {
     lintConfig = file("lint.xml")
     warningsAsErrors = true
   }
-
-  testOptions {
-    unitTests.isIncludeAndroidResources = true
-  }
 }
 
 kotlin {
@@ -84,26 +81,47 @@ dependencies {
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
+  implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.activity.compose)
-  implementation(libs.androidx.webkit)
 
+  // Compose
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material.icons.extended)
   implementation(libs.androidx.compose.material3)
-
   debugImplementation(libs.androidx.compose.ui.tooling)
 
-  // Material Components
+  // Material
   implementation(libs.material)
 
+  // CameraX
+  implementation(libs.camerax.core)
+  implementation(libs.camerax.camera2)
+  implementation(libs.camerax.lifecycle)
+  implementation(libs.camerax.view)
+
+  // Network
+  implementation(libs.retrofit)
+  implementation(libs.retrofit.converter.gson)
+  implementation(libs.okhttp)
+  implementation(libs.okhttp.logging)
+
+  // Image
+  implementation(libs.coil.compose)
+
+  // FCM
+  implementation(libs.firebase.messaging)
+
+  // Room
+  implementation(libs.room.runtime)
+  implementation(libs.room.ktx)
+  ksp(libs.room.compiler)
+
+  // Coroutines
   implementation(libs.kotlinx.coroutines.android)
-  implementation(libs.kotlinx.coroutines.guava)
   implementation(libs.kotlinx.serialization.json)
 
-  // Encrypted SharedPreferences
-  implementation(libs.androidx.security.crypto)
-
+  // Test
   testImplementation(libs.junit)
   testImplementation(libs.kotlinx.coroutines.test)
   testImplementation(libs.kotest.runner.junit5)

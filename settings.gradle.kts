@@ -14,6 +14,5 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Memento"
+rootProject.name = "Memento-Sol"
 include(":app")
-//include(":benchmark")  // benchmark module requires additional plugins, skip for now
