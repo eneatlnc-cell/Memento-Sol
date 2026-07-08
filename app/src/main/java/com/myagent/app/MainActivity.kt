@@ -11,9 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
 
 /**
- * Memento v2.0 主 Activity — 单一 Activity 架构，使用 Jetpack Compose。
+ * Memento-App 主 Activity — 单一 Activity 架构，Jetpack Compose。
  *
- * 启动流程：欢迎页 → 激活页 → 模型下载 → 人格选择 → 对话。
+ * 作为 Memento-X 桌面端的移动伴侣，提供：
+ * - 素材采集（拍照/相册）
+ * - 共享素材库浏览
+ * - 任务完成通知接收
+ * - 账户管理
  */
 class MainActivity : ComponentActivity() {
   private val viewModel: MainViewModel by viewModels()
@@ -23,21 +27,11 @@ class MainActivity : ComponentActivity() {
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
     setContent {
-      val appearanceThemeMode by viewModel.appearanceThemeMode.collectAsState()
-      MementoTheme(themeMode = appearanceThemeMode) {
+      val appearanceMode by viewModel.appearanceMode.collectAsState()
+      val skinMode by viewModel.skinMode.collectAsState()
+      MementoTheme(themeMode = appearanceMode, skin = skinMode) {
         RootScreen(viewModel = viewModel)
       }
     }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    // 触发 runtime 后台初始化，避免启动后长时间空白
-    viewModel.setForeground(true)
-  }
-
-  override fun onPause() {
-    super.onPause()
-    viewModel.setForeground(false)
   }
 }
